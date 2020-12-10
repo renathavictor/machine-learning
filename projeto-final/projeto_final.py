@@ -181,7 +181,7 @@ def k_means(X_train, X_test, y_train, y_test):
   for i in range(clusters):
     map_labels.append([])
 
-  # new_y_train = y_train.to_list()
+  new_y_train = list(y_train)
 
   for i in range(len(y_train)):
     for c in range(clusters):
