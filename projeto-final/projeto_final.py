@@ -68,10 +68,19 @@ folds = 10
 
 kf = StratifiedKFold(n_splits = folds)
 
-X_train_accent, X_train_leaf, X_train_abalone = [], [], []
-X_test_accent, X_test_leaf, X_test_abalone = [], [], []
-y_train_accent, y_train_leaf, y_train_abalone = [], [], []
-y_test_accent, y_test_leaf, y_test_abalone = [], [], []
+X_train_accent = []
+X_train_leaf = []
+X_train_abalone = []
+X_test_accent = []
+X_test_leaf = []
+X_test_abalone = []
+
+y_train_accent = []
+y_train_leaf = []
+y_train_abalone = []
+y_test_accent = []
+y_test_leaf = []
+y_test_abalone = []
 
 def cross_validation(arr_xtrain, arr_xtest, arr_ytrain, arr_ytest, X, y):
   for train_index, test_index in kf.split(X,y):
@@ -84,6 +93,22 @@ def cross_validation(arr_xtrain, arr_xtest, arr_ytrain, arr_ytest, X, y):
 cross_validation(X_train_accent, X_test_accent, y_train_accent, y_test_accent, X_accent, y_accent)
 cross_validation(X_train_leaf, X_test_leaf, y_train_leaf, y_test_leaf, X_leaf, y_leaf)
 cross_validation(X_train_abalone, X_test_abalone, y_train_abalone, y_test_abalone, X_abalone, y_abalone)
+
+X_train_accent = list(X_train_accent)
+X_train_leaf = list(X_train_leaf)
+X_train_abalone = list(X_train_abalone)
+
+X_test_accent = list(X_test_accent)
+X_test_leaf = list(X_test_leaf)
+X_test_abalone = list(X_test_abalone)
+
+y_train_accent = list(y_train_accent)
+y_train_leaf = list(y_train_leaf)
+y_train_abalone = list(y_train_abalone)
+
+y_test_accent = list(y_test_accent)
+y_test_leaf = list(y_test_leaf)
+y_test_abalone = list(y_test_abalone)
 
 # Arvore de decisao
 
@@ -100,26 +125,6 @@ def arvore_decisao(criterion, X_train, X_test, y_train, y_test):
       'acc': acc
   }
 
-tree_accent_entropy, tree_leaf_entropy, tree_abalone_entropy = [], [], []
-tree_accent_gini, tree_leaf_gini, tree_abalone_gini = [], [], []
-
-for i in range(folds):
-  # Entropy
-  accent_entropy = arvore_decisao('entropy', X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i])
-  leaf_entropy = arvore_decisao('entropy', X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i])
-  abalone_entropy = arvore_decisao('entropy', X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i])
-  tree_accent_entropy.append(accent_entropy)
-  tree_leaf_entropy.append(leaf_entropy)
-  tree_abalone_entropy.append(abalone_entropy)
-  # Gini
-  accent_gini = arvore_decisao('gini', X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i])
-  leaf_gini = arvore_decisao('gini', X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i])
-  abalone_gini = arvore_decisao('gini', X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i])
-
-  tree_accent_gini.append(accent_gini)
-  tree_leaf_gini.append(leaf_gini)
-  tree_abalone_gini.append(abalone_gini)
-
 # KNN - Vizinhos com distancia euclidean
 
 def classifica_knn(k, X_train, X_test, y_train, y_test):
@@ -134,30 +139,6 @@ def classifica_knn(k, X_train, X_test, y_train, y_test):
     'result': result,
     'acc': acc
   }
-
-knn_accent_5 = []
-knn_leaf_5 = []
-knn_abalone_5 = []
-knn_accent_10 = []
-knn_leaf_10 = []
-knn_abalone_10 = []
-
-for i in range(folds):
-  accent_5 = classifica_knn(5, X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i])
-  leaf_5 = classifica_knn(5, X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i])
-  abalone_5 = classifica_knn(5, X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i])
-
-  accent_10 = classifica_knn(10, X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i])
-  leaf_10 = classifica_knn(10, X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i])
-  abalone_10 = classifica_knn(10, X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i])
-
-  knn_accent_5.append(accent_5)
-  knn_leaf_5.append(leaf_5)
-  knn_abalone_5.append(abalone_5)
-
-  knn_accent_10.append(accent_10)
-  knn_leaf_10.append(leaf_10)
-  knn_abalone_10.append(abalone_10)
 
 # MLP
 # https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html
@@ -181,50 +162,6 @@ def classifica_mlp(X_train, X_test, y_train, y_test, activation, layer_size):
       'show': show,
       'result': result
   }
-
-#  tanh
-accent_tanh_tupla_one = []
-accent_tanh_tupla_two = []
-leaf_tanh_tupla_one = []
-leaf_tanh_tupla_two = []
-abalone_tanh_tupla_one = []
-abalone_tanh_tupla_two = []
-# relu
-accent_relu_tupla_one = []
-accent_relu_tupla_two = []
-leaf_relu_tupla_one = []
-leaf_relu_tupla_two = []
-abalone_relu_tupla_one = []
-abalone_relu_tupla_two = []
-
-for i in range(folds):
-  # tanh
-  model_accent_train1 = classifica_mlp(X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i], active_one, tupla_size_one)
-  model_accent_train2 = classifica_mlp(X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i], active_one, tupla_size_two)
-  model_leaf_train1 = classifica_mlp(X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i], active_one, tupla_size_one)
-  model_leaf_train2 = classifica_mlp(X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i], active_one, tupla_size_two)
-  model_abalone_train1 = classifica_mlp(X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i], active_one, tupla_size_one)
-  model_abalone_train2 = classifica_mlp(X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i], active_one, tupla_size_two)
-  accent_tanh_tupla_one.append(model_accent_train1)
-  accent_tanh_tupla_two.append(model_accent_train2)
-  leaf_tanh_tupla_one.append(model_leaf_train1)
-  leaf_tanh_tupla_two.append(model_leaf_train2)
-  abalone_tanh_tupla_one.append(model_abalone_train1)
-  abalone_tanh_tupla_two.append(model_abalone_train2)
-
-  # #  relu
-  model_accent_relu1 = classifica_mlp(X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i], active_two, tupla_size_one)
-  model_accent_relu2 = classifica_mlp(X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i], active_two, tupla_size_two)
-  model_leaf_relu1 = classifica_mlp(X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i], active_two, tupla_size_one)
-  model_leaf_relu2 = classifica_mlp(X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i], active_two, tupla_size_two)
-  model_abalone_relu1 = classifica_mlp(X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i], active_two, tupla_size_one)
-  model_abalone_relu2 = classifica_mlp(X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i], active_two, tupla_size_two)
-  accent_relu_tupla_one.append(model_accent_relu1)
-  accent_relu_tupla_two.append(model_accent_relu2)
-  leaf_relu_tupla_one.append(model_leaf_relu1)
-  leaf_relu_tupla_two.append(model_leaf_relu2)
-  abalone_relu_tupla_one.append(model_abalone_relu1)
-  abalone_relu_tupla_two.append(model_abalone_relu2)
 
 # K Means
 # https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html
@@ -274,11 +211,106 @@ def k_means(X_train, X_test, y_train, y_test):
       'acc': acc
   }
 
+# Executar os treinamentos
+
+### Arvore ###
+tree_accent_entropy = []
+tree_leaf_entropy = []
+tree_abalone_entropy = []
+tree_accent_gini = []
+tree_leaf_gini = []
+tree_abalone_gini = []
+
+### KNN ###
+knn_accent_5 = []
+knn_leaf_5 = []
+knn_abalone_5 = []
+knn_accent_10 = []
+knn_leaf_10 = []
+knn_abalone_10 = []
+
+#### MLP ###
+#  tanh
+accent_tanh_tupla_one = []
+accent_tanh_tupla_two = []
+leaf_tanh_tupla_one = []
+leaf_tanh_tupla_two = []
+abalone_tanh_tupla_one = []
+abalone_tanh_tupla_two = []
+# relu
+accent_relu_tupla_one = []
+accent_relu_tupla_two = []
+leaf_relu_tupla_one = []
+leaf_relu_tupla_two = []
+abalone_relu_tupla_one = []
+abalone_relu_tupla_two = []
+
+### Kmeans ###
 kmeans_accent = []
 kmeans_leaf = []
 kmeans_abalone = []
 
 for i in range(folds):
+  # Arvore de decisao
+  # Entropy
+  accent_entropy = arvore_decisao('entropy', X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i])
+  leaf_entropy = arvore_decisao('entropy', X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i])
+  abalone_entropy = arvore_decisao('entropy', X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i])
+  tree_accent_entropy.append(accent_entropy)
+  tree_leaf_entropy.append(leaf_entropy)
+  tree_abalone_entropy.append(abalone_entropy)
+  # Gini
+  accent_gini = arvore_decisao('gini', X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i])
+  leaf_gini = arvore_decisao('gini', X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i])
+  abalone_gini = arvore_decisao('gini', X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i])
+  tree_accent_gini.append(accent_gini)
+  tree_leaf_gini.append(leaf_gini)
+  tree_abalone_gini.append(abalone_gini)
+
+  # KNN
+  accent_5 = classifica_knn(5, X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i])
+  leaf_5 = classifica_knn(5, X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i])
+  abalone_5 = classifica_knn(5, X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i])
+  accent_10 = classifica_knn(10, X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i])
+  leaf_10 = classifica_knn(10, X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i])
+  abalone_10 = classifica_knn(10, X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i])
+
+  knn_accent_5.append(accent_5)
+  knn_leaf_5.append(leaf_5)
+  knn_abalone_5.append(abalone_5)
+  knn_accent_10.append(accent_10)
+  knn_leaf_10.append(leaf_10)
+  knn_abalone_10.append(abalone_10)
+
+  # MLP
+  # tanh
+  model_accent_train1 = classifica_mlp(X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i], active_one, tupla_size_one)
+  model_accent_train2 = classifica_mlp(X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i], active_one, tupla_size_two)
+  model_leaf_train1 = classifica_mlp(X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i], active_one, tupla_size_one)
+  model_leaf_train2 = classifica_mlp(X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i], active_one, tupla_size_two)
+  model_abalone_train1 = classifica_mlp(X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i], active_one, tupla_size_one)
+  model_abalone_train2 = classifica_mlp(X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i], active_one, tupla_size_two)
+  accent_tanh_tupla_one.append(model_accent_train1)
+  accent_tanh_tupla_two.append(model_accent_train2)
+  leaf_tanh_tupla_one.append(model_leaf_train1)
+  leaf_tanh_tupla_two.append(model_leaf_train2)
+  abalone_tanh_tupla_one.append(model_abalone_train1)
+  abalone_tanh_tupla_two.append(model_abalone_train2)
+  # relu
+  model_accent_relu1 = classifica_mlp(X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i], active_two, tupla_size_one)
+  model_accent_relu2 = classifica_mlp(X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i], active_two, tupla_size_two)
+  model_leaf_relu1 = classifica_mlp(X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i], active_two, tupla_size_one)
+  model_leaf_relu2 = classifica_mlp(X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i], active_two, tupla_size_two)
+  model_abalone_relu1 = classifica_mlp(X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i], active_two, tupla_size_one)
+  model_abalone_relu2 = classifica_mlp(X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i], active_two, tupla_size_two)
+  accent_relu_tupla_one.append(model_accent_relu1)
+  accent_relu_tupla_two.append(model_accent_relu2)
+  leaf_relu_tupla_one.append(model_leaf_relu1)
+  leaf_relu_tupla_two.append(model_leaf_relu2)
+  abalone_relu_tupla_one.append(model_abalone_relu1)
+  abalone_relu_tupla_two.append(model_abalone_relu2)
+
+  # KMEANS
   accent = k_means(X_train_accent[i], X_test_accent[i], y_train_accent[i], y_test_accent[i])
   leaf = k_means(X_train_leaf[i], X_test_leaf[i], y_train_leaf[i], y_test_leaf[i])
   abalone = k_means(X_train_abalone[i], X_test_abalone[i], y_train_abalone[i], y_test_abalone[i])
@@ -287,7 +319,7 @@ for i in range(folds):
   kmeans_leaf.append(leaf)
   kmeans_abalone.append(abalone)
 
-# Relatório
+# Plotagem MLP e KMeans
 # https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.plot.html#matplotlib.pyplot.plot
 import matplotlib.pyplot as plt
 
