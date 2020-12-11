@@ -143,8 +143,6 @@ def classifica_knn(k, X_train, X_test, y_train, y_test):
 # MLP
 # https://scikit-learn.org/stable/modules/generated/sklearn.neural_network.MLPClassifier.html
 
-# ve para adicionar no objeto do return os Parâmetros da Rede do exemplo
-
 active_one = 'tanh'
 active_two = 'relu'
 tupla_size_one = (30, 10)
