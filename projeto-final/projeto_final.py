@@ -211,7 +211,7 @@ def k_means(X_train, X_test, y_train, y_test):
       'acc': acc
   }
 
-# Executar os treinamentos
+# Executar os algoritmos
 
 ### Arvore ###
 tree_accent_entropy = []
